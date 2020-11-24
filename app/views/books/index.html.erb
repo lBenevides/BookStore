@@ -1,0 +1,21 @@
+<%= current_user.username %>
+<br>
+<%= link_to 'Cart', user_carts_path(current_user)%> 
+<br>
+<%= link_to 'Log_out', '/sign_out', method: :delete %>
+
+<hr>
+<h2>Books</h2>
+
+<% @books.each do |b| %>
+  <%= form_with model: @cart, url: user_carts_path(current_user) do |f| %>
+    <%= f.label b.title %>
+    <%= f.hidden_field :book_id, value: b.id%>
+    <%= f.hidden_field :quantity, value: 1%>
+    <br>
+    <%= f.label b.price %>
+    <br>
+    <%= f.submit "Adicionar ao Carrinho"%>
+    <br><br>
+  <% end %>
+<% end %>

@@ -1,0 +1,14 @@
+<%= current_user.username  %> <strong>Cart</strong> </h2>
+<br>
+<hr>
+
+<% @cart.each do |c| %>
+
+  <%= @books.find_by(id: c.book_id).title %> <br>
+  Quantity: <%= c.quantity %>
+  <br><br>
+<% end%>
+<hr>
+<button>Buy</button>
+<input type="number">
+
