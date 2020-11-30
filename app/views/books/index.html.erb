@@ -1,6 +1,10 @@
 <%= current_user.username %>
 <br>
-<%= link_to 'Cart', user_carts_path(current_user)%> 
+<%= link_to "Cart", user_carts_path(current_user)%> 
+<span id="cart_value">
+  (<%=  @cart_value %>)
+</span>
+
 <br>
 <%= link_to 'Log_out', '/sign_out', method: :delete %>
 
@@ -9,7 +13,7 @@
 
 <% @books.each do |b| %>
   <%= form_with model: @cart, url: user_carts_path(current_user) do |f| %>
-    <%= f.label b.title %>
+   <%= link_to b.title, book_path(b.id) %>
     <%= f.hidden_field :book_id, value: b.id%>
     <%= f.hidden_field :quantity, value: 1%>
     <br>
@@ -19,3 +23,4 @@
     <br><br>
   <% end %>
 <% end %>
+

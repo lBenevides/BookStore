@@ -2,13 +2,64 @@
 <br>
 <hr>
 
-<% @cart.each do |c| %>
 
-  <%= @books.find_by(id: c.book_id).title %> <br>
-  Quantity: <%= c.quantity %>
-  <br><br>
+<table>
+<th>
+  Book
+</th>
+
+<th>
+  Price
+</th>
+
+<th>
+  Quantity 
+</th>
+
+<th>
+  Total 
+</th>
+
+
+<% @user_cart.each do |c| %>
+<tr>
+  <td>
+    <%= @books.find_by(id: c.book_id).title %> <br>
+  </td>
+  <td>
+    <%= @books.find_by(id: c.book_id).price %>
+  </td>
+
+  <td>
+    <%= form_with url: user_cart_path(current_user, c.book_id), method: :patch do |f|%>
+      <%= f.submit '+'%>
+        <span id="<%= c.book_id %>"> <%= c.quantity %> </span> 
+      <%= f.submit '-'%>
+    <% end %>
+  </td>
+  <td>
+    <span id="Total<%= c.book_id %>">
+      <%= @books.find_by(id: c.book_id).price * c.quantity %>
+    </span>
+  </td>
+  
+  
+</tr>
 <% end%>
+</table>
 <hr>
-<button>Buy</button>
-<input type="number">
+  <span id="subtotal">
+    Subtotal <%= subtotal %>
+  </span> 
+  
+
+
+<br> <br>
+  Shopping Rates
+<br> <br>
+  <strong> Total</strong>   
+<hr>
+<br>
+
+<%= link_to 'Back', books_path %>
 
