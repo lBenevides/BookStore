@@ -1,0 +1,7 @@
+var table = document.getElementById('TR<%= @cart_item.id %>');
+
+table.remove()
+ 
+var cart_subtotal = document.getElementById('subtotal');
+cart_subtotal.innerHTML = "Subtotal <%= subtotal %>";
+

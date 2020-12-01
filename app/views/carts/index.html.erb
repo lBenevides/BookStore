@@ -22,7 +22,7 @@
 
 
 <% @user_cart.each do |c| %>
-<tr>
+<tr id=TR<%= c.id %>>
   <td>
     <%= @books.find_by(id: c.book_id).title %> <br>
   </td>
@@ -31,7 +31,7 @@
   </td>
 
   <td>
-    <%= form_with url: user_cart_path(current_user, c.book_id), method: :patch do |f|%>
+    <%= form_with url: user_cart_path(current_user, c.book_id), remote: true, method: :patch do |f|%>
       <%= f.submit '+'%>
         <span id="<%= c.book_id %>"> <%= c.quantity %> </span> 
       <%= f.submit '-'%>
@@ -42,8 +42,12 @@
       <%= @books.find_by(id: c.book_id).price * c.quantity %>
     </span>
   </td>
+  <td>
+    <%= link_to 'Destroy', user_cart_path(current_user, c.book_id), remote: true, method: :delete %>
+  </td>
   
   
+ 
 </tr>
 <% end%>
 </table>
@@ -53,7 +57,6 @@
   </span> 
   
 
-
 <br> <br>
   Shopping Rates
 <br> <br>
@@ -62,4 +65,3 @@
 <br>
 
 <%= link_to 'Back', books_path %>
-

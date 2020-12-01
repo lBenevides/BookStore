@@ -2,8 +2,7 @@ var cart_item_value = document.getElementById(<%= @cart_item.book_id %>);
 var cart_item_total = document.getElementById('Total<%= @cart_item.book_id %>')
 var cart_subtotal = document.getElementById('subtotal');
 
-cart_item_value.innerHTML = <%= @cart_item.quantity %>
-cart_item_total.innerHTML = "<%= @cart_item_total%>"
+cart_item_value.innerHTML = <%= @cart_item.quantity %>;
+cart_item_total.innerHTML = "<%= @cart_item_total%>";
 
-cart_subtotal.innerHTML = "Subtotal <%= subtotal %>"
-
+cart_subtotal.innerHTML = "Subtotal <%= subtotal %>";
