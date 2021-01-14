@@ -1,8 +1,22 @@
 var cart_item_value = document.getElementById(<%= @cart_item.book_id %>);
 var cart_item_total = document.getElementById('Total<%= @cart_item.book_id %>')
 var cart_subtotal = document.getElementById('subtotal');
+var cart_total = document.getElementById('total');
 
 cart_item_value.innerHTML = <%= @cart_item.quantity %>;
 cart_item_total.innerHTML = "<%= @cart_item_total%>";
 
 cart_subtotal.innerHTML = "Subtotal <%= subtotal %>";
+var subtotal_value = <%= subtotal %>;
+var shipping_value = parseFloat(document.getElementById('shipping-rates').innerHTML) 
+
+if (isNaN(shipping_value)){
+  var total_value = subtotal_value
+}
+else {
+  var total_value = subtotal_value + shipping_value
+}
+
+
+cart_total.innerHTML = 'Total ' + total_value;
+

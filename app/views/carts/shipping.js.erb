@@ -1,0 +1,31 @@
+console.log('Fetching')
+fetch(
+'https://cors-anywhere.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=09146920&sDsSenha=123456&'+
+'sCepOrigem=52020095&'+
+'sCepDestino=04578910&'+
+'nVlPeso=1&'+
+'nCdFormato=1&'+
+'nVlComprimento=30&'+
+'nVlAltura=30&'+
+'nVlLargura=30&'+
+'sCdMaoPropria=n&'+
+'nVlValorDeclarado=0&'+
+'sCdAvisoRecebimento=n&'+
+'nCdServico=40010&'+
+'nVlDiametro=0&'+
+'StrRetorno=xml&nIndicaCalculo=3'
+, {mode: 'cors',
+  headers: {
+    "Access-Control-Allow-Headers": "Content-Type",
+    "Access-Control-Allow-Origin": '*',
+  },
+})
+  .then(function(response){
+    return response.text();
+  })
+  .then(function(data) {
+    let parser = new DOMParser(),
+        xmlDoc = parser.parseFromString(data, 'text/xml');
+        console.log(xmlDoc);
+        console.log(xmlDoc.getElementsByTagName('Valor')[0]);
+    });

@@ -1,0 +1,27 @@
+<%= current_user.username %> <strong>Orders</strong>
+<br>
+<hr>
+
+<% @user_orders.select(:order_number).distinct.each do |c| %>
+Order No <%= c.order_number %>&nbsp;&nbsp;&nbsp; Total
+
+ 
+<table>
+
+  <th>Book</th>
+  <th>Price</th>
+  <th>Quantity</th>
+
+  <% @user_orders.where(order_number: c.order_number).each do |order| %>
+    <tr>
+      <td><%= @books.find(order.book_id).title %></td>
+      <td><%= @books.find(order.book_id).price %></td>
+      <td><%= order.quantity %></td>
+    </tr>
+  <% end%>
+
+</table>
+<hr>
+<% end%>
+
+<%= link_to 'Back', books_path %>

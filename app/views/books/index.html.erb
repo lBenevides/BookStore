@@ -1,5 +1,9 @@
 <%= current_user.username %>
 <br>
+Available Money <%= @current_user.cash %>
+<br>
+<%= link_to "Orders", user_orders_path(current_user) %>
+<br>
 <%= link_to "Cart", user_carts_path(current_user)%> 
 <span id="cart_value">
   (<%=  @cart_value %>)

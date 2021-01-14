@@ -1,67 +1,100 @@
 <%= current_user.username  %> <strong>Cart</strong> </h2>
 <br>
+Available Money <%= @current_user.cash %>
+<br>
 <hr>
 
 
 <table>
-<th>
-  Book
-</th>
+  <th>Book</th>
 
-<th>
-  Price
-</th>
+  <th>Price</th>
 
-<th>
-  Quantity 
-</th>
+  <th>Quantity</th>
 
-<th>
-  Total 
-</th>
+  <th>Total</th>
 
 
-<% @user_cart.each do |c| %>
-<tr id=TR<%= c.id %>>
-  <td>
-    <%= @books.find_by(id: c.book_id).title %> <br>
-  </td>
-  <td>
-    <%= @books.find_by(id: c.book_id).price %>
-  </td>
+  <% @user_cart.each do |c| %>
+    <tr id=TR<%= c.id %>>
+      <td><%= @books.find_by(id: c.book_id).title %> <br></td>
+      <td><%= @books.find_by(id: c.book_id).price %></td>
 
-  <td>
-    <%= form_with url: user_cart_path(current_user, c.book_id), remote: true, method: :patch do |f|%>
-      <%= f.submit '+'%>
-        <span id="<%= c.book_id %>"> <%= c.quantity %> </span> 
-      <%= f.submit '-'%>
-    <% end %>
-  </td>
-  <td>
-    <span id="Total<%= c.book_id %>">
-      <%= @books.find_by(id: c.book_id).price * c.quantity %>
-    </span>
-  </td>
-  <td>
-    <%= link_to 'Destroy', user_cart_path(current_user, c.book_id), remote: true, method: :delete %>
-  </td>
-  
-  
- 
-</tr>
-<% end%>
+      <td>
+        <%= form_with url: user_cart_path(current_user, c.book_id), remote: true, method: :patch do |f|%>
+          <%= f.submit '+'%>
+            <span id="<%= c.book_id %>"> <%= c.quantity %> </span> 
+          <%= f.submit '-'%>
+        <% end %>
+      </td>
+
+      <td> <span id="Total<%= c.book_id %>"><%= @books.find_by(id: c.book_id).price * c.quantity %></span> </td>
+      <td> <%= link_to 'Destroy', user_cart_path(current_user, c.book_id), remote: true, method: :delete %> </td>
+    </tr>
+  <% end%>
 </table>
 <hr>
   <span id="subtotal">
     Subtotal <%= subtotal %>
   </span> 
-  
+  <hr>
+  CEP
+  <input type="number" name="" id="CEP" size="8">
+  <button id="botão" onclick="dale()">Calculate </button>
 
-<br> <br>
-  Shopping Rates
-<br> <br>
-  <strong> Total</strong>   
+  <br> <br>
+
+  Shipping
+  <span id="shipping-rates"></span>
+
+  <hr>
+
+  <strong> <span id="total">Total <%= subtotal %> </span></strong>   
+
 <hr>
-<br>
-
+<span>
+<%= button_to 'Buy', buy_path(current_user), method: :get %>
+</span>
+<hr>
 <%= link_to 'Back', books_path %>
+
+<script>
+  var shipping_rates = document.getElementById('shipping-rates');
+  function dale() {
+    let CepDestino = document.getElementById('CEP').value;
+    console.log('Fetching')
+    shipping_rates.innerHTML = '(Loading)'
+    fetch(
+    'https://cors-anywhere.herokuapp.com/http://ws.correios.com.br/calculador/CalcPrecoPrazo.aspx?nCdEmpresa=09146920&sDsSenha=123456&'+
+    'sCepOrigem=52020095&'+
+    `sCepDestino=${CepDestino}&`+
+    'nVlPeso=1&'+
+    'nCdFormato=1&'+
+    'nVlComprimento=30&'+
+    'nVlAltura=30&'+
+    'nVlLargura=30&'+
+    'sCdMaoPropria=n&'+
+    'nVlValorDeclarado=0&'+
+    'sCdAvisoRecebimento=n&'+
+    'nCdServico=40010&'+
+    'nVlDiametro=0&'+
+    'StrRetorno=xml&nIndicaCalculo=3'
+    , {mode: 'cors',
+      headers: {
+        "Access-Control-Allow-Headers": "Content-Type",
+        "Access-Control-Allow-Origin": '*',
+      },
+    })
+      .then(function(response){
+        return response.text();
+      })
+      .then(function(data) {
+        let parser = new DOMParser(),
+            xmlDoc = parser.parseFromString(data, 'text/html');
+            console.log(xmlDoc);
+            console.log(xmlDoc.getElementsByTagName('Valor')[0]);
+            shipping_rates.innerHTML = parseFloat(xmlDoc.getElementsByTagName('Valor')[0].innerHTML.replace(",","."))
+            
+        });
+  }
+</script>
